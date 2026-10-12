@@ -73,6 +73,8 @@ describe("encodeQRCore", () => {
   it("refuses a forced kanji mode it has no table for", () => {
     expect(() => encodeQRCore("漢字", { mode: "kanji" })).toThrow(InvalidInputError)
     expect(() => encodeQRCore("漢字", { mode: "kanji" })).toThrow(/kanjiCodec/)
+    // Too long for any version, and still the table is what it says is missing
+    expect(() => encodeQRCore("漢".repeat(1800), { mode: "kanji" })).toThrow(/kanjiCodec/)
     expect(encodeQRCore("漢字", { mode: "kanji", kanji: kanjiCodec })).toEqual(
       encodeQR("漢字", { mode: "kanji" }),
     )

@@ -137,12 +137,7 @@ export function encodeKanjiData(sjisValues: number[]): number[] {
  * arithmetically, so anything derived by formula produces symbols that decode
  * to the wrong characters.
  */
-export function unicodeToShiftJIS(text: string, kanji?: KanjiCodec): number[] {
-  if (!kanji) {
-    throw new InvalidInputError(
-      "QR kanji mode needs the Shift-JIS table: use encodeQR, or pass { kanji: kanjiCodec } to encodeQRCore",
-    )
-  }
+export function unicodeToShiftJIS(text: string, kanji: KanjiCodec): number[] {
   const values: number[] = []
   for (const char of text) {
     const sjis = kanji.toShiftJIS(char)

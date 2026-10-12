@@ -94,6 +94,13 @@ export function planEncoding(
     )
   }
 
+  // Checked before capacity, which would otherwise answer for a long text
+  if (forcedMode === "kanji" && !options.kanji) {
+    throw new InvalidInputError(
+      "QR kanji mode needs the Shift-JIS table: use encodeQR, or pass { kanji: kanjiCodec } to encodeQRCore",
+    )
+  }
+
   if (options.version !== undefined) {
     const segments = segmentsFor(payload, options.version, forcedMode, options.kanji)
     const needed = headerBits(options) + totalBits(segments, options.version)
@@ -313,7 +320,7 @@ function appendSegment(
       bits.push(...encodeByteData(asBytes(segment.data)))
       break
     case "kanji":
-      bits.push(...encodeKanjiData(unicodeToShiftJIS(asText(segment.data), kanji)))
+      bits.push(...encodeKanjiData(unicodeToShiftJIS(asText(segment.data), kanji!)))
       break
   }
 }
